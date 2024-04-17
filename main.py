@@ -15,9 +15,9 @@ EPISODES = 100
 # If USE_GPU is True, the program will attempt to utilize the GPU. If it fails, a RuntimeError will be raised.
 USE_GPU = False
 # If MODEL_FILE_PATH is not empty, the program will attempt to load an existing model from that path.
-MODEL_FILE_PATH = './models/my_model.h5'
+MODEL_FILE_PATH = ''
 # If NEW_MODEL_FILE is not empty, the program will replace the existing model with the new one. It will be stored in ./models/.
-NEW_MODEL_FILE = 'my_model.h5'
+NEW_MODEL_FILE = ''
 
 
 def box_text(text):
