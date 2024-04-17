@@ -17,14 +17,19 @@ This repository contains an implementation of a Tic Tac Toe environment and a Q-
 ## Requirements
 
 - Python 3.9 - 3.11
-- To use GPU:
-    - tensorflow-2.15.0	
-    - cuDNN 8.9	
-    - CUDA 12.2
-    - NVIDIA >=525.60.13
 
-https://www.tensorflow.org/install/source#gpu
-https://docs.nvidia.com/deploy/cuda-compatibility/index.html#default-to-minor-version
+## GPU Requirements
+
+To utilize GPU acceleration, ensure the following components are installed:
+
+- TensorFlow version 2.15.0 or later
+- cuDNN version 8.9
+- CUDA version 12.2
+- NVIDIA driver version 525.60.13 or later
+
+You can find other info here:
+ - [https://www.tensorflow.org/install/source#gpu](https://www.tensorflow.org/install/source#gpu)
+ - [https://docs.nvidia.com/deploy/cuda-compatibility/index.html#default-to-minor-version](https://docs.nvidia.com/deploy/cuda-compatibility/index.html#default-to-minor-version)
 
 ## Getting Started
 
