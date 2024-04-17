@@ -51,3 +51,10 @@ This repository contains an implementation of a Tic Tac Toe environment and a Q-
 
 ## License
 
+This project is licensed under the MIT LICENSE - see the [LICENSE](LICENSE) file for details.
+
+## Notes
+
+Feel free to contribute or report issues!
+This README provides a clearer structure, concise information, and instructions for setting up and running the TicTacToe_Agent. Adjust the content as needed for your project.
+
