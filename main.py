@@ -14,7 +14,7 @@ from tic_tac_toe_environment import TicTacToeEnvironment
 BATCH_SIZE = 32
 EPISODES = 10
 # If USE_GPU is True, the program will attempt to utilize the GPU. If it fails, a RuntimeError will be raised.
-USE_GPU = False
+USE_GPU = True
 # If MODEL_FILE_PATH is not empty, the program will attempt to load an existing model from that path.
 MODEL_FILE_PATH = ''
 # If NEW_MODEL_FILE is not empty, the program will replace the existing model with the new one. It will be stored in ./models/.
@@ -231,47 +231,51 @@ def play_against_agent(env, agent):
         env (TicTacToeEnvironment): The TicTacToeEnvironment object representing the game environment.
         agent (QLearningAgent): The QLearningAgent object representing the AI agent to play against.
     '''
-    # Test the agent
-    state = env._reset()
-    state = state.flatten()
-    done = False
-    
-    while not done:
-        env.moves = 0
-        board = state.tolist()
-        board = convert_board(board)
-        os.system('cls||clear')
-        print(f'{board[:3]}\n{board[3:6]}\n{board[-3:]}\n')
-
-        if count_nonzero(state == 0.0) % 2:
-            action = agent.act(state)
-        else:
-            try:
-                action = int(input('Choose a number: '))
-            except ValueError:
-                os.system('cls||clear')
-                print('Choose a number between 0 and 8')
+    while True:
+        # Test the agent
+        state = env._reset()
+        state = state.flatten()
+        done = False
         
-        # Perform the chosen action and observe the next state and reward
-        next_state, reward, done = env._step(action)
-        next_state = next_state.flatten()
+        while not done:
+            env.moves = 0
+            board = state.tolist()
+            board = convert_board(board)
+            os.system('cls||clear')
+            print(f'{board[:3]}\n{board[3:6]}\n{board[-3:]}\n')
 
-        # Store the experience tuple in the agent's memory
-        state = next_state
+            if count_nonzero(state == 0.0) % 2:
+                action = agent.act(state)
+            else:
+                try:
+                    action = int(input('Choose a number: '))
+                except ValueError:
+                    os.system('cls||clear')
+                    print('Choose a number between 0 and 8')
+            
+            # Perform the chosen action and observe the next state and reward
+            next_state, reward, done = env._step(action)
+            next_state = next_state.flatten()
 
-        winner = env.check_winner()
-    if winner:
-        board = state.tolist()
-        board = convert_board(board)
-        os.system('cls||clear')
-        print(f'{board[:3]}\n{board[3:6]}\n{board[-3:]}\n')
-        print(f'Player {winner} won')
-    elif winner == None:
-        board = state.tolist()
-        board = convert_board(board)
-        os.system('cls||clear')
-        print(f'{board[:3]}\n{board[3:6]}\n{board[-3:]}\n')
-        print(f"It's a DRAW")
+            # Store the experience tuple in the agent's memory
+            state = next_state
+
+            winner = env.check_winner()
+        if winner:
+            board = state.tolist()
+            board = convert_board(board)
+            os.system('cls||clear')
+            print(f'{board[:3]}\n{board[3:6]}\n{board[-3:]}\n')
+            print(f'Player {winner} won')
+        elif winner == None:
+            board = state.tolist()
+            board = convert_board(board)
+            os.system('cls||clear')
+            print(f'{board[:3]}\n{board[3:6]}\n{board[-3:]}\n')
+            print(f"It's a DRAW")
+        
+        if input('Do you want to play again? [y/n]') != 'y':
+            break
 
 def main():
     # Record the start time
