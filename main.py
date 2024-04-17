@@ -206,6 +206,14 @@ def save_model(agent, folder_name):
     agent.save_model(path + '.h5')
 
 def convert_board(board):
+    '''
+    Convert the numerical representation of the Tic-Tac-Toe board into a human-readable format.
+    Args:
+        board (list): The current state of the Tic-Tac-Toe board, represented as a list of integers.
+    Returns:
+        list: A human-readable representation of the Tic-Tac-Toe board, with 'X' representing Player 1's moves,
+              'O' representing Player 2's moves, and numbers representing empty spaces.
+    '''
     for i, value in enumerate(board):
         if value == 1:
             board[i] = 'X'
@@ -217,7 +225,12 @@ def convert_board(board):
     return board
 
 def play_against_agent(env, agent):
-    
+    '''
+    Play a game of Tic-Tac-Toe against the provided agent.
+    Args:
+        env (TicTacToeEnvironment): The TicTacToeEnvironment object representing the game environment.
+        agent (QLearningAgent): The QLearningAgent object representing the AI agent to play against.
+    '''
     # Test the agent
     state = env._reset()
     state = state.flatten()
