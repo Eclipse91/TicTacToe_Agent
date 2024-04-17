@@ -18,7 +18,7 @@ This repository contains an implementation of a Tic Tac Toe environment and a Q-
 
 - Python 3.9 - 3.11
 
-## GPU Requirements
+## GPU Requirements (not mandatory)
 
 To utilize GPU acceleration, ensure the following components are installed:
 
@@ -27,7 +27,7 @@ To utilize GPU acceleration, ensure the following components are installed:
 - CUDA version 12.2
 - NVIDIA driver version 525.60.13 or later
 
-You can find other info here:
+For further details and additional information, please refer to the following resources:
  - [https://www.tensorflow.org/install/source#gpu](https://www.tensorflow.org/install/source#gpu)
  - [https://docs.nvidia.com/deploy/cuda-compatibility/index.html#default-to-minor-version](https://docs.nvidia.com/deploy/cuda-compatibility/index.html#default-to-minor-version)
 
