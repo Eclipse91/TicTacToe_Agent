@@ -11,7 +11,7 @@ from tic_tac_toe_environment import TicTacToeEnvironment
 
 # Constants
 BATCH_SIZE = 32
-EPISODES = 100
+EPISODES = 1000
 # If USE_GPU is True, the program will attempt to utilize the GPU. If it fails, a RuntimeError will be raised.
 USE_GPU = False
 # If MODEL_FILE_PATH is not empty, the program will attempt to load an existing model from that path.
