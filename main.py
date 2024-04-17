@@ -4,6 +4,7 @@ import shutil
 import logging
 from time import time
 from datetime import datetime
+from numpy import count_nonzero
 from pu_info import PUInfo
 from q_learning_agent import QLearningAgent
 from tic_tac_toe_environment import TicTacToeEnvironment
@@ -11,7 +12,7 @@ from tic_tac_toe_environment import TicTacToeEnvironment
 
 # Constants
 BATCH_SIZE = 32
-EPISODES = 1000
+EPISODES = 10
 # If USE_GPU is True, the program will attempt to utilize the GPU. If it fails, a RuntimeError will be raised.
 USE_GPU = False
 # If MODEL_FILE_PATH is not empty, the program will attempt to load an existing model from that path.
@@ -204,6 +205,61 @@ def save_model(agent, folder_name):
     
     agent.save_model(path + '.h5')
 
+def convert_board(board):
+    for i, value in enumerate(board):
+        if value == 1:
+            board[i] = 'X'
+        elif value == 2:
+            board[i] = 'O'
+        else:
+            board[i] = str(i)
+
+    return board
+
+def play_against_agent(env, agent):
+    
+    # Test the agent
+    state = env._reset()
+    state = state.flatten()
+    done = False
+    
+    while not done:
+        env.moves = 0
+        board = state.tolist()
+        board = convert_board(board)
+        os.system('cls||clear')
+        print(f'{board[:3]}\n{board[3:6]}\n{board[-3:]}\n')
+
+        if count_nonzero(state == 0.0) % 2:
+            action = agent.act(state)
+        else:
+            try:
+                action = int(input('Choose a number: '))
+            except ValueError:
+                os.system('cls||clear')
+                print('Choose a number between 0 and 8')
+        
+        # Perform the chosen action and observe the next state and reward
+        next_state, reward, done = env._step(action)
+        next_state = next_state.flatten()
+
+        # Store the experience tuple in the agent's memory
+        state = next_state
+
+        winner = env.check_winner()
+    if winner:
+        board = state.tolist()
+        board = convert_board(board)
+        os.system('cls||clear')
+        print(f'{board[:3]}\n{board[3:6]}\n{board[-3:]}\n')
+        print(f'Player {winner} won')
+    elif winner == None:
+        board = state.tolist()
+        board = convert_board(board)
+        os.system('cls||clear')
+        print(f'{board[:3]}\n{board[3:6]}\n{board[-3:]}\n')
+        print(f"It's a DRAW")
+
 def main():
     # Record the start time
     start = time()
@@ -280,6 +336,8 @@ def main():
     seconds = duration % 60  # Get remaining seconds
     logging.info(f'Total duration: {duration} seconds')
     logging.info(f'Total duration: {minutes} minutes and {seconds:.2f} seconds')  # Format seconds with 2 decimal places
+
+    play_against_agent(env, agent)
 
     
 if __name__ == '__main__':
