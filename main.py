@@ -5,6 +5,7 @@ import logging
 from time import time
 from datetime import datetime
 from numpy import count_nonzero
+import tensorflow as tf
 from pu_info import PUInfo
 from q_learning_agent import QLearningAgent
 from tic_tac_toe_environment import TicTacToeEnvironment
@@ -12,12 +13,14 @@ from tic_tac_toe_environment import TicTacToeEnvironment
 
 # Constants
 BATCH_SIZE = 32
-EPISODES = 10
+EPISODES = 1000
 # If USE_GPU is True, the program will attempt to utilize the GPU. If it fails, a RuntimeError will be raised.
-USE_GPU = True
-# If MODEL_FILE_PATH is not empty, the program will attempt to load an existing model from that path.
+USE_GPU = False
+# If MODEL_FILE_PATH is not empty, the program will attempt to load an existing model from that path. 
+# Example './models/model_20240418_090434/model_20240418_090434.h5'
 MODEL_FILE_PATH = ''
-# If NEW_MODEL_FILE is not empty, the program will replace the existing model with the new one. It will be stored in ./models/.
+# If NEW_MODEL_FILE is not empty, the program will replace the existing model with the new one. It will be stored in ./models/. 
+# Example 'my_model'
 NEW_MODEL_FILE = ''
 
 
@@ -194,16 +197,28 @@ def create_folder_and_copy_files(folder_name):
 
 def save_model(agent, folder_name):
     '''
-    Saves the model of the agent into the models folder with the same name as the associated log file.
+    Saves the model of the agent into the models folder in .h5 and .tflite format.
     Args:
         agent: The agent whose model needs to be saved.
         folder_name (str): The name of the folder to save the model into.
     '''
     models_directory = './models/'
     os.makedirs(models_directory, exist_ok=True)
-    path = models_directory + extract_main_part(folder_name).replace('main', 'model')
+    folder_name = models_directory + extract_main_part(folder_name).replace('main', 'model')
+    if not os.path.exists(folder_name):
+        os.makedirs(folder_name)
+        print(f'Folder "{folder_name}" created successfully.')
+
+    file_path = folder_name + '/' + extract_main_part(folder_name)
+    agent.save_model(file_path + '.h5')
+    agent.save_model(file_path)
     
-    agent.save_model(path + '.h5')
+    converter = tf.lite.TFLiteConverter.from_saved_model(file_path)
+    tflite_model = converter.convert()
+
+    # Save the TensorFlow Lite model to a file
+    with open(file_path + '.tflite', 'wb') as f:
+        f.write(tflite_model)
 
 def convert_board(board):
     '''
@@ -274,7 +289,7 @@ def play_against_agent(env, agent):
             print(f'{board[:3]}\n{board[3:6]}\n{board[-3:]}\n')
             print(f"It's a DRAW")
         
-        if input('Do you want to play again? [y/n]') != 'y':
+        if input('Do you want to play again? [y/n] ') != 'y':
             break
 
 def main():
