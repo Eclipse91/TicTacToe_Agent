@@ -27,8 +27,10 @@ class TicTacToeEnvironment:
     def _step(self, action):
         row, col = action // 3, action % 3
         if self.state[row, col] == 0:  # Check if the position is empty
-            self.state[row, col] = self.current_player  # Place the player's mark
-            logging.info(f'\nPlayer {self.current_player}\tAction: {action}\n{self.state}')
+            self.state[row, col] = self.current_player  # Place the mark
+            logging.info(
+              f'\nPlayer {self.current_player}\tAction: {action}\n{self.state}'
+            )
             winner = self.check_winner()
 
             if winner is not None:
@@ -39,7 +41,8 @@ class TicTacToeEnvironment:
                 logging.info(f'DRAW:\n{self.state}')
                 return self.state, FINISHED_GAME_REWARD_DRAW, True  # Draw
             else:
-                self.current_player = 2 if self.current_player == 1 else 1 # Switch players
+                # Switch players
+                self.current_player = 2 if self.current_player == 1 else 1 
                 self.moves += 1
                 if self.moves >= 9:
                     return self.state, -10, True
@@ -52,8 +55,10 @@ class TicTacToeEnvironment:
 
     def check_winner(self):
         for player in [1, 2]:
-            if np.any(np.all(self.state == player, axis=0)) or np.any(np.all(self.state == player, axis=1)):
+            if np.any(np.all(self.state == player, axis=0)) \
+                or np.any(np.all(self.state == player, axis=1)):
                 return player
-            if np.all(np.diag(self.state) == player) or np.all(np.diag(np.fliplr(self.state)) == player):
+            if np.all(np.diag(self.state) == player) \
+                or np.all(np.diag(np.fliplr(self.state)) == player):
                 return player
         return None

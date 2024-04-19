@@ -14,6 +14,7 @@ __pycache__/
 logs
 files
 models
+model_file
 
 # Ignore the .log and files
 *.log

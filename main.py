@@ -14,12 +14,15 @@ from tic_tac_toe_environment import TicTacToeEnvironment
 # Constants
 BATCH_SIZE = 32
 EPISODES = 1000
-# If USE_GPU is True, the program will attempt to utilize the GPU. If it fails, a RuntimeError will be raised.
+# If USE_GPU is True, the program will attempt to utilize the GPU. If it fails, 
+# a RuntimeError will be raised.
 USE_GPU = False
-# If MODEL_FILE_PATH is not empty, the program will attempt to load an existing model from that path. 
+# If MODEL_FILE_PATH is not empty, the program will attempt to load an existing 
+# model from that path. 
 # Example './models/model_20240418_090434/model_20240418_090434.h5'
 MODEL_FILE_PATH = ''
-# If NEW_MODEL_FILE is not empty, the program will replace the existing model with the new one. It will be stored in ./models/. 
+# If NEW_MODEL_FILE is not empty, the program will replace the existing model 
+# with the new one. It will be stored in ./models/. 
 # Example 'my_model'
 NEW_MODEL_FILE = ''
 
@@ -49,10 +52,9 @@ def log_layer_values(agent):
         agent: An object containing a TensorFlow model with layers.
 
     '''
-    logging.info(f'\nModel:')
-    model = ''
+    model = f'{"="*10}WEIGHTS OF NEURAL NETWORK LAYERS{"="*10}\n'
     for i, layer in enumerate(agent.model.layers):
-        model += f'Layer {i+1}\n'#{layer.get_weights()}\n'
+        model += f'Layer {i+1}\n'
         for weight in layer.get_weights():
             model += f'{weight}\n'
     logging.info(box_text(model))
@@ -61,7 +63,8 @@ def log_layer_info(layer):
     '''
     Log information about a Keras layer.
     Args:
-        layer (tf.keras.layers.Layer): The Keras layer to log information about.
+        layer (tf.keras.layers.Layer): The Keras layer to log information 
+        about.
     Returns:
         layer_logs: Info about the Keras layer.
     '''
@@ -96,10 +99,14 @@ def log_layer_info(layer):
     layer_logs += f'Trainable: {layer.trainable}\n'
 
     if hasattr(layer, 'kernel_initializer'):
-        layer_logs += f'Kernel Initializer: {layer.kernel_initializer.__class__.__name__}\n'
+        layer_logs += (
+          f'Kernel Initializer: {layer.kernel_initializer.__class__.__name__}\n'
+        )
 
     if hasattr(layer, 'bias_initializer'):
-        layer_logs += f'Bias Initializer: {layer.bias_initializer.__class__.__name__}\n'
+        layer_logs += (
+            f'Bias Initializer: {layer.bias_initializer.__class__.__name__}\n'
+            )
 
     return layer_logs
 
@@ -111,9 +118,10 @@ def log_agent_info(agent, log_file):
         log_file (str): The path to the log file.
     '''
     # Parameters
-    other_logs = (f'{"="*10}PARAMETERS{"="*10}\nBatch_size: {BATCH_SIZE}\nEpisodes: {EPISODES}\nUse_GPU: {USE_GPU}\n' 
-                + (f'Old_model: {MODEL_FILE_PATH}\n' if MODEL_FILE_PATH else '')
-                + (f'New_model: {NEW_MODEL_FILE}\n' if NEW_MODEL_FILE else ''))
+    other_logs = (f'{"="*10}PARAMETERS{"="*10}\n'
+               f'Batch_size: {BATCH_SIZE}\nEpisodes: {EPISODES}\nUse_GPU: {USE_GPU}\n' 
+            + (f'Old_model: {MODEL_FILE_PATH}\n' if MODEL_FILE_PATH else '')
+            + (f'New_model: {NEW_MODEL_FILE}\n' if NEW_MODEL_FILE else ''))
    
     logging.info(box_text(other_logs))
 
@@ -127,7 +135,8 @@ def log_agent_info(agent, log_file):
 
     logging.info(box_text(agent_logs))
 
-    # Open a file in write mode (creates the file if it doesn't exist, otherwise truncates it)
+    # Open a file in write mode (creates the file if it doesn't exist, 
+    # otherwise truncates it)
     with open(log_file, 'a') as f:
         # Redirect the stdout to the file
         sys.stdout = f
@@ -156,15 +165,17 @@ def log_configurator():
     formatted_datetime = current_datetime.strftime('%Y%m%d_%H%M%S')
     log_file = f'{log_directory}{current_file_name}_{formatted_datetime}.log'
 
-    # logging.basicConfig(filename=log_file, level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-    logging.basicConfig(filename=log_file, level=logging.INFO, format='%(message)s')
+    logging.basicConfig(
+        filename=log_file, level=logging.INFO, format='%(message)s'
+        )
     logging.info('Program started')
 
     return log_file
 
 def extract_main_part(file_path):
     '''
-    Extracts the main part of the file name without the extension and the directory.
+    Extracts the main part of the file name without the extension and the 
+    directory.
     Args:
         file_path (str): The path of the file.
 
@@ -177,8 +188,9 @@ def extract_main_part(file_path):
 
 def create_folder_and_copy_files(folder_name):
     '''
-    Creates a folder with the same name as the associated log file into the files folder.
-    This utility can be useful for organizing experiments until you identify the best fitting model.    
+    Creates a folder with the same name as the associated log file into the 
+    files folder. This utility can be useful for organizing experiments until 
+    you identify the best fitting model.    
     Args:
         folder_name (str): The name of the folder to be created.
     '''
@@ -197,14 +209,16 @@ def create_folder_and_copy_files(folder_name):
 
 def save_model(agent, folder_name):
     '''
-    Saves the model of the agent into the models folder in .h5 and .tflite format.
+    Saves the model of the agent into the models folder in .h5 and .tflite 
+    format.
     Args:
         agent: The agent whose model needs to be saved.
         folder_name (str): The name of the folder to save the model into.
     '''
     models_directory = './models/'
     os.makedirs(models_directory, exist_ok=True)
-    folder_name = models_directory + extract_main_part(folder_name).replace('main', 'model')
+    folder_name = models_directory\
+          + extract_main_part(folder_name).replace('main', 'model')
     if not os.path.exists(folder_name):
         os.makedirs(folder_name)
         print(f'Folder "{folder_name}" created successfully.')
@@ -222,12 +236,15 @@ def save_model(agent, folder_name):
 
 def convert_board(board):
     '''
-    Convert the numerical representation of the Tic-Tac-Toe board into a human-readable format.
+    Convert the numerical representation of the Tic-Tac-Toe board into a 
+    human-readable format.
     Args:
-        board (list): The current state of the Tic-Tac-Toe board, represented as a list of integers.
+        board (list): The current state of the Tic-Tac-Toe board, represented 
+        as a list of integers.
     Returns:
-        list: A human-readable representation of the Tic-Tac-Toe board, with 'X' representing Player 1's moves,
-              'O' representing Player 2's moves, and numbers representing empty spaces.
+        list: A human-readable representation of the Tic-Tac-Toe board, 
+              with 'X' representing Player 1's moves,'O' representing 
+              Player 2's moves, and numbers representing empty spaces.
     '''
     for i, value in enumerate(board):
         if value == 1:
@@ -243,8 +260,10 @@ def play_against_agent(env, agent):
     '''
     Play a game of Tic-Tac-Toe against the provided agent.
     Args:
-        env (TicTacToeEnvironment): The TicTacToeEnvironment object representing the game environment.
-        agent (QLearningAgent): The QLearningAgent object representing the AI agent to play against.
+        env (TicTacToeEnvironment): The TicTacToeEnvironment object 
+            representing the game environment.
+        agent (QLearningAgent): The QLearningAgent object representing the AI 
+            agent to play against.
     '''
     while True:
         # Test the agent
@@ -306,13 +325,16 @@ def main():
     if USE_GPU:
         logging.info(box_text(PUInfo.log_gpu_info()))
     else:
-        # Disable CUDA devices visibility to TensorFlow by setting CUDA_VISIBLE_DEVICES to an empty string
+        # Disable CUDA devices visibility to TensorFlow by setting 
+        # CUDA_VISIBLE_DEVICES to an empty string
         os.environ['CUDA_VISIBLE_DEVICES'] = ''
         logging.info(box_text(PUInfo.log_cpu_info()))
 
     # Initialize the environment and agent
     env = TicTacToeEnvironment()
-    agent = QLearningAgent(state_size=9, action_size=9, path_to_model=MODEL_FILE_PATH)
+    agent = QLearningAgent(state_size=9, 
+                           action_size=9, 
+                           path_to_model=MODEL_FILE_PATH)
 
     # Add agent info
     log_agent_info(agent, log_file)
@@ -340,11 +362,18 @@ def main():
             agent.remember(state, action, reward, next_state, done)
             state = next_state
 
-            # Perform experience replay if the agent's memory is sufficiently filled
+            # Perform experience replay if the agent's memory is 
+            # sufficiently filled
             if len(agent.memory) > BATCH_SIZE:
                 agent.replay(BATCH_SIZE)
 
-            logging.info(f'Action: {action}, Reward: {reward}, Done: {done}, Episode: {episode}, Epsilon: {agent.epsilon}')
+            logging.info(
+                f'Action: {action}, '
+                f'Reward: {reward: 3d}, '
+                f'Done: {done!s:5}, '
+                f'Episode: {episode}, '
+                f'Epsilon: {agent.epsilon}'
+            )
 
         # Record end time
         end_time = time()
@@ -362,12 +391,13 @@ def main():
     # Log the trained model
     log_layer_values(agent)
 
-    # Calculate and log the total duration in both seconds and minutes with seconds formatted to two decimal places
+    # Calculate and log the total duration in both seconds and minutes 
     duration = time() - start
     minutes = int(duration // 60)  # Get whole minutes
     seconds = duration % 60  # Get remaining seconds
     logging.info(f'Total duration: {duration} seconds')
-    logging.info(f'Total duration: {minutes} minutes and {seconds:.2f} seconds')  # Format seconds with 2 decimal places
+    logging.info(f'Total duration: {minutes} minutes'
+                 f' and {seconds:.2f} seconds')
 
     play_against_agent(env, agent)
 
